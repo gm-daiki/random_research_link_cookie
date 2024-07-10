@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>アンケートリダイレクト</title>
+    <script>
+        // URLリスト
+        const urls = [
+            "https://docs.google.com/forms/d/1DtbkhtyNkX-mXIM-9ST0YhyVFMQGKGz1_3qEC7Nyyf0/edit",
+                "https://docs.google.com/forms/d/19hezpPTsZx-3VDHHO2PZCD4RrKJtg_CO0vPgQsC3O9o/edit",
+                "https://docs.google.com/forms/d/1APRvFG-yIoT6Y9tHmWvIk8QVgKlFGc6YYesCCslacv8/edit",
+                "https://docs.google.com/forms/d/1q3mBUampdWMfwxETX4DN3309ogRXuNIveUSCF_uZeLQ/edit"
+        ];
+
+        // クッキーの値を取得する関数
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        // クッキーに値を設定する関数
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = `expires=${d.toUTCString()}`;
+            document.cookie = `${name}=${value}; ${expires}; path=/`;
+        }
+
+        // アクセス回数を取得
+        let visitCount = getCookie('visitCount');
+        if (!visitCount) {
+            visitCount = 0;
+        } else {
+            visitCount = parseInt(visitCount);
+        }
+
+        // リダイレクト先のURLを決定
+        const nextUrl = urls[visitCount % urls.length];
+
+        // クッキーに新しいアクセス回数を設定
+        setCookie('visitCount', visitCount + 1, 365);
+
+        // リダイレクト
+        window.location.href = nextUrl;
+    </script>
+</head>
+<body>
+    <p>リダイレクト中...</p>
+</body>
+</html>
